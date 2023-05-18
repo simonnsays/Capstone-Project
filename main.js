@@ -40,7 +40,6 @@ game.components[0].slots.push(new Slot ({
     }
 }))
 
-console.log(game.components[0].slots.position + game.components[0].slots.offset)
 // Start the game
 game.start()
 
