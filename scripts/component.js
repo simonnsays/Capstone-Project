@@ -1,9 +1,10 @@
 class Component {
-    constructor ({name, position, assetSrc}) {
+    constructor ({name, position, assetSrc, slots = []}) {
         this.name = name
         this.position = position
         this.image = new Image()
         this.image.src = assetSrc
+        this.slots = slots
     }
 
     checkBoundingBox({x, y}) { // boolean, checks if x,y is within bounding box

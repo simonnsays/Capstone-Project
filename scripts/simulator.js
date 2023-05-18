@@ -1,5 +1,5 @@
-class Simulator{
-    constructor(components = [], selectedComponent = undefined) {
+class Simulator {
+    constructor(components = [], selectedComponent = null) {
       this.canvas = document.querySelector('canvas')
       this.context = this.canvas.getContext('2d')
       this.components = components
@@ -13,14 +13,12 @@ class Simulator{
     }
     
     handleMouseDown(e) {
-      
+      // get mouse position AND boundingBox of components
       this.selectedComponent = this.getPiece(this.getMousePosition(e))
       const mousePosition = this.getMousePosition(e)
-      console.log(this.components[1].checkBoundingBox(mousePosition))
-      console.log(mousePosition.x)
-      console.log(e.clientX)
 
-      if (this.selectedComponent != undefined){
+      // so that you won't grab asset by the corner always
+      if (this.selectedComponent != null){
         this.selectedComponent.offset = {
           x: mousePosition.x - this.selectedComponent.position.x,
           y: mousePosition.y - this.selectedComponent.position.y
@@ -35,10 +33,36 @@ class Simulator{
       if(this.selectedComponent != null) {
         this.selectedComponent.position.x = mousePosition.x - this.selectedComponent.offset.x
         this.selectedComponent.position.y = mousePosition.y - this.selectedComponent.offset.y
+        for (let slot in this.selectedComponent.slots) {
+          this.selectedComponent.slots[slot].position.x = mousePosition.x - this.selectedComponent.offset.x
+          this.selectedComponent.slots[slot].position.y = mousePosition.y - this.selectedComponent.offset.y
+        }
+
+        for (let component in this.components) {
+          if (this.components[component].slots != 0) {
+            for (let slot in this.components[component].slots){
+
+              if (this.selectedComponent.name === this.components[component].slots[slot].name) {
+                if (this.components[component].slots[slot].isClose(this.selectedComponent.position, this.selectedComponent.image.width))
+                  this.components[component].slots[slot].showHighlight = true
+                  console.log(this.components[component].slots[slot].showHighlight)
+              }
+            }
+          }
+        }
       }
     }
 
     handleMouseUp() {
+      
+
+      for (let component in this.components) {
+        for (let slot in this.components[component].slots){
+          
+          this.components[component].slots[slot].showHighlight = false
+        }
+      }
+
       this.selectedComponent = null
     }
 
@@ -68,8 +92,17 @@ class Simulator{
 
       for (let component in this.components){ 
         this.components[component].draw(this.canvas)
+
+        if (this.components[component].slots != 0) {
+          for (let slot in this.components[component].slots) {
+            if (this.components[component].slots[slot].showHighlight) {
+              this.components[component].slots[slot].draw(this.canvas)
+            }
+          }
+        }
       }
-  
+      
+      // this.components[0].slots[0].draw(this.canvas)
       // Call the draw method again to create an animation loop
       requestAnimationFrame(() => this.animate())
     }
