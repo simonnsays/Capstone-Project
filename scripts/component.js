@@ -21,6 +21,11 @@ class Component {
         }
     }
 
+    snap(target) {
+        this.position.x = target.x
+        this.position.y = target.y
+    }
+
     draw(canvas) {
         canvas.getContext('2d').drawImage(this.image,this.position.x, this.position.y)
     }

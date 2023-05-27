@@ -39,26 +39,26 @@ class Simulator {
         }
 
         for (let component in this.components) {
-          if (this.components[component].slots != 0) {
-            for (let slot in this.components[component].slots){
-
-              if (this.selectedComponent.name === this.components[component].slots[slot].name) {
-                if (this.components[component].slots[slot].isClose(this.selectedComponent.position, this.selectedComponent.image.width))
-                  this.components[component].slots[slot].showHighlight = true
-                  console.log(this.components[component].slots[slot].showHighlight)
+          for (let slot in this.components[component].slots){
+            if (this.selectedComponent.name === this.components[component].slots[slot].name) {
+              if (this.components[component].slots[slot].isClose(this.selectedComponent.position, this.selectedComponent.image.width)) {
+                this.components[component].slots[slot].showHighlight = true
+              } else {
+                this.components[component].slots[slot].showHighlight = false
               }
-            }
+            } 
           }
         }
       }
     }
 
-    handleMouseUp() {
-      
-
+    handleMouseUp() {      
       for (let component in this.components) {
         for (let slot in this.components[component].slots){
-          
+          if (this.components[component].slots[slot].isClose(this.selectedComponent.position, this.selectedComponent.image.width)) {
+            this.selectedComponent.snap(this.components[component].slots[slot].placement())
+          }
+
           this.components[component].slots[slot].showHighlight = false
         }
       }
@@ -93,16 +93,13 @@ class Simulator {
       for (let component in this.components){ 
         this.components[component].draw(this.canvas)
 
-        if (this.components[component].slots != 0) {
-          for (let slot in this.components[component].slots) {
-            if (this.components[component].slots[slot].showHighlight) {
-              this.components[component].slots[slot].draw(this.canvas)
-            }
+        for (let slot in this.components[component].slots) {
+          if (this.components[component].slots[slot].showHighlight) {
+            this.components[component].slots[slot].draw(this.canvas)
           }
         }
       }
       
-      // this.components[0].slots[0].draw(this.canvas)
       // Call the draw method again to create an animation loop
       requestAnimationFrame(() => this.animate())
     }

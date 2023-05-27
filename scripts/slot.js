@@ -7,6 +7,13 @@ class Slot {
         this.showHighlight = showHighlight
     }
 
+    placement() {
+        return {
+            x: this.position.x + this.offset.x,
+            y: this.position.y + this.offset.y
+        }
+    }
+
     distance(point1, point2) {
         let a = point1.x - point2.x
         let b = point1.y - point2.y
