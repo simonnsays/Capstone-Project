@@ -1,4 +1,4 @@
-class Component {
+export class Component {
     constructor ({type, name, states, size, imgSrc}) {
         this.type = type
         this.name = name

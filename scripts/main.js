@@ -1,3 +1,5 @@
+import {UI} from './ui.js'
+
 const game = new UI
 let components = []
 
