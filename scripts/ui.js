@@ -46,9 +46,7 @@ class UI {
         this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e))
         this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e))
         this.canvas.addEventListener('mouseup', () => this.handleMouseUp())
-        this.canvas.addEventListener('touchstart', (e) => this.handleMouseDown(e))
-        this.canvas.addEventListener('touchmove', (e) => this.handleMouseMove(e))
-        this.canvas.addEventListener('touchend', () => this.handleMouseUp())
+
     }   
 
     handleMouseDown(e) {
