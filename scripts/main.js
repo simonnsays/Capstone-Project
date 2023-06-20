@@ -1,6 +1,3 @@
-import {UI} from './ui.js'
-import { Component } from './component.js'
-
 const game = new UI
 let components = []
 
@@ -25,61 +22,59 @@ components.push(new Component({
 
 ///////////// FILL SHOP Function
 function fillShop(items) {
-    const contents = document.querySelector('#shopContents');
-    
-    items.forEach((item) => {
-        const content = document.createElement('a');
-        content.className = 'content';
-        content.id = item.name;
-        content.addEventListener('click', () => transferToInv(content.id));
+    const contents = document.querySelector('#shopContents')
 
-        const image = document.createElement('img');
-        image.src = item.states.default.imageSrc;
-        image.style.width = '150px';
-        image.style.height = '150px';
-        image.style.padding = '10px';
+    for (let item in items) {
+        const content = document.createElement('a')
+        content.className = 'content'
+        content.id = items[item].name
+        content.href = `javascript:transferToInv("${content.id}")`
 
-        content.appendChild(image);
-        contents.appendChild(content);
-    });
+        const image = document.createElement('img')
+        image.src = items[item].states.default.imageSrc
+        image.style.width = '150px'
+        image.style.height = '150px'
+        image.style.padding = '10px'
+        content.appendChild(image)
+        contents.appendChild(content)
+    }
 }
 
 /////////////// TRANSFER TO INV
 function transferToInv(name) {
-    const contents = document.querySelector('#invContents');
-    const content = document.createElement('a');
-    content.className = 'content';
-    content.id = name;
-    content.addEventListener('click', () => transferToCanvas(content.id));
+    const contents = document.querySelector('#invContents')
+    const content = document.createElement('a')
+    content.className = 'content'
+    content.id = name
+    content.href = `javascript:transferToCanvas("${content.id}")`
 
-    const component = components.find((comp) => comp.name === content.id);
-    if (component) {
-        const image = document.createElement('img');
-        image.src = component.states.default.imageSrc;
-        image.style.width = '150px';
-        image.style.height = '150px';
-        image.style.padding = '10px';
+    for (let component in components) {
+        if(components[component].name === content.id) {
+            const image = document.createElement('img')
+            image.src = components[component].states.default.imageSrc
+            image.style.width = '150px'
+            image.style.height = '150px'
+            image.style.padding = '10px'
 
-        content.appendChild(image);
+            content.appendChild(image)
+        }
     }
-
-    contents.appendChild(content);
+    contents.appendChild(content)
 }
 
 /////////////// TRANSFER TO UI
 function transferToCanvas(name) {
-    const component = components.find(comp => comp.name === name);
-    if (component) {
-        if (component.type === 'pcCase') {
-            game.addToPcCaseArea(component);
-        } else {
-            game.addToCmponentArea(component);
+    for (let component in components) {
+        if(components[component].name === name) {
+            if(components[component].type === 'pcCase') {
+                game.addToPcCaseArea(components[component])
+            } else {
+                game.addToCmponentArea(components[component])
+            }
         }
+
     }
 }
 
 game.start()
 fillShop(components)
-
-
-
